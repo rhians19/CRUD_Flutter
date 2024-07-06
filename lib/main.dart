@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/provider/users.dart';
 import 'package:flutter_application_1/routes/app_routes.dart';
+import 'package:flutter_application_1/views/login.dart';
 import 'package:flutter_application_1/views/user_form.dart';
 import 'package:flutter_application_1/views/user_list.dart';
 import 'package:provider/provider.dart';
@@ -17,10 +18,10 @@ class MyApp extends StatelessWidget {
     return MultiProvider(
       providers: [
         ChangeNotifierProvider(
-      create: (ctx) => Users(),
-      ),
-    ],
-    child: MaterialApp(
+          create: (ctx) => Users(),
+        ),
+      ],
+      child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
           primarySwatch: Colors.blue,
@@ -28,7 +29,8 @@ class MyApp extends StatelessWidget {
         ),
         debugShowCheckedModeBanner: false,
         routes: {
-          AppRoutes.Home: (_) => UserList(),
+          AppRoutes.Login: (_) => const Login(),
+          AppRoutes.Home: (_) => const UserList(),
           AppRoutes.User_Form: (_) => UserForm()
         },
       ),

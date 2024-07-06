@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/user_tile.dart';
-import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/provider/users.dart';
 import 'package:flutter_application_1/routes/app_routes.dart';
 import 'package:provider/provider.dart';
 
 class UserList extends StatelessWidget {
-  const UserList({Key? key}) : super(key: key);
+  const UserList({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -22,16 +21,14 @@ class UserList extends StatelessWidget {
             fontWeight: FontWeight.bold,
           ),
         ),
-        centerTitle: true,  // Centraliza o título
+        centerTitle: true, // Centraliza o título
         backgroundColor: Colors.blue,
         elevation: 5,
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.add, color: Colors.white),
             onPressed: () {
-             Navigator.of(context).pushNamed(
-              AppRoutes.User_Form
-             );
+              Navigator.of(context).pushNamed(AppRoutes.User_Form);
             },
           ),
         ],

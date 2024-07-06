@@ -7,14 +7,14 @@ import 'package:provider/provider.dart';
 class UserTile extends StatelessWidget {
   final User user;
 
-  const UserTile(this.user, {Key? key}) : super(key: key);
+  const UserTile(this.user, {super.key});
 
   @override
   Widget build(BuildContext context) {
-    final avatar = user.avatarUrl == null || user.avatarUrl.isEmpty
+    final avatar = user.avatarUrl.isEmpty
         ? const CircleAvatar(child: Icon(Icons.person))
         : CircleAvatar(backgroundImage: NetworkImage(user.avatarUrl));
-    
+
     return ListTile(
       leading: avatar,
       title: Text(user.name),
@@ -30,31 +30,32 @@ class UserTile extends StatelessWidget {
                 Navigator.of(context).pushNamed(
                   AppRoutes.User_Form,
                   arguments: user,
-              );
-             },
+                );
+              },
             ),
             IconButton(
               icon: const Icon(Icons.delete),
               color: Colors.red,
               onPressed: () {
                 showDialog(
-                  context: context, 
+                  context: context,
                   builder: (ctx) => AlertDialog(
-                    title: Text('Excluir Usuário'),
-                    content: Text('Tem Certeza?'),
+                    title: const Text('Excluir Usuário'),
+                    content: const Text('Tem Certeza?'),
                     actions: <Widget>[
                       TextButton(
-                        child: Text('Não'),
+                        child: const Text('Não'),
                         onPressed: () {
                           Navigator.of(context).pop();
-                        },   
+                        },
                       ),
                       TextButton(
-                        child: Text('Sim'),
+                        child: const Text('Sim'),
                         onPressed: () {
-                          Provider.of<Users>(context, listen: false).remove(user);
+                          Provider.of<Users>(context, listen: false)
+                              .remove(user);
                           Navigator.of(context).pop();
-                        }, 
+                        },
                       ),
                     ],
                   ),

@@ -7,6 +7,8 @@ class UserForm extends StatelessWidget {
   final _form = GlobalKey<FormState>();
   final Map<String, String> _formData = {};
 
+  UserForm({super.key});
+
   void _loadFormData(User? user) {
     if (user != null) {
       _formData['id'] = user.id ?? '';
@@ -23,7 +25,7 @@ class UserForm extends StatelessWidget {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(
+        title: const Text(
           'Formulário de Usuário',
           style: TextStyle(
             color: Colors.white,
@@ -36,7 +38,7 @@ class UserForm extends StatelessWidget {
         elevation: 5,
         actions: [
           IconButton(
-            icon: Icon(Icons.save),
+            icon: const Icon(Icons.save),
             onPressed: () {
               final isValid = _form.currentState?.validate() ?? false;
               if (isValid) {
@@ -56,7 +58,7 @@ class UserForm extends StatelessWidget {
         ],
       ),
       body: Padding(
-        padding: EdgeInsets.all(15),
+        padding: const EdgeInsets.all(15),
         child: Form(
           key: _form,
           child: Column(
@@ -65,7 +67,7 @@ class UserForm extends StatelessWidget {
                 initialValue: _formData['name'],
                 decoration: InputDecoration(
                   labelText: 'Nome',
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: const TextStyle(color: Colors.blue),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -78,12 +80,12 @@ class UserForm extends StatelessWidget {
                 },
                 onSaved: (value) => _formData['name'] = value!,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 initialValue: _formData['email'],
                 decoration: InputDecoration(
                   labelText: 'E-mail',
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: const TextStyle(color: Colors.blue),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
@@ -96,12 +98,12 @@ class UserForm extends StatelessWidget {
                 },
                 onSaved: (value) => _formData['email'] = value!,
               ),
-              SizedBox(height: 10),
+              const SizedBox(height: 10),
               TextFormField(
                 initialValue: _formData['avatarUrl'],
                 decoration: InputDecoration(
                   labelText: 'URL do Avatar',
-                  labelStyle: TextStyle(color: Colors.blue),
+                  labelStyle: const TextStyle(color: Colors.blue),
                   border: OutlineInputBorder(
                     borderRadius: BorderRadius.circular(10.0),
                   ),
