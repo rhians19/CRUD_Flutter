@@ -1,16 +1,34 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/components/user_tile.dart';
-import 'package:flutter_application_1/provider/users.dart';
+import 'package:flutter_application_1/models/user.dart';
 import 'package:flutter_application_1/routes/app_routes.dart';
-import 'package:provider/provider.dart';
 
-class UserList extends StatelessWidget {
+class UserList extends StatefulWidget {
   const UserList({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final Users users = Provider.of<Users>(context);
+  State<UserList> createState() => _UserList();
+}
 
+class _UserList extends State<UserList> {
+  late List<QueryDocumentSnapshot<Map<String, dynamic>>> userList = [];
+
+  @override
+  void initState() {
+    super.initState();
+    listUsers();
+  }
+
+  listUsers() async {
+    final users = await FirebaseFirestore.instance.collection("usuarios").get();
+    setState(() {
+      userList = users.docs;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text(
@@ -34,8 +52,13 @@ class UserList extends StatelessWidget {
         ],
       ),
       body: ListView.builder(
-        itemCount: users.count,
-        itemBuilder: (ctx, i) => UserTile(users.byIndex(i)),
+        itemCount: userList.length,
+        itemBuilder: (ctx, i) {
+          var currentUser = userList[i].data();
+          var nome = currentUser['nome'];
+          var email = currentUser['email'];
+          return UserTile(User(name: nome, email: email, avatarUrl: ""));
+        },
       ),
     );
   }

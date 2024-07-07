@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/services/autentication_service.dart';
 
@@ -13,7 +14,8 @@ class _RegisterState extends State<Register> {
   final TextEditingController nameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
   final TextEditingController passwordController = TextEditingController();
-  final TextEditingController confirmPasswordController = TextEditingController();
+  final TextEditingController confirmPasswordController =
+      TextEditingController();
 
   final AuthServ _authServ = AuthServ();
 
@@ -26,19 +28,24 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
-  registerBtn() {
+  registerBtn() async {
     if (formKey.currentState!.validate()) {
       final nome = nameController.text.trim();
       final email = emailController.text.trim();
       final password = passwordController.text.trim();
 
       _authServ.cadastrarUsuario(nome: nome, email: email, password: password);
-      
-      // Implemente a lógica de registro aqui
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Usuário registrado com sucesso!')),
-      );
-      Navigator.pop(context);
+
+      try {
+        final operation = await FirebaseFirestore.instance
+            .collection("usuarios")
+            .doc()
+            .set({'nome': nome, 'email': email, 'senha': password});
+
+        return operation;
+      } catch (e) {
+        print("Erro: $e");
+      }
     }
   }
 
@@ -170,7 +177,18 @@ class _RegisterState extends State<Register> {
               ),
               const SizedBox(height: 16),
               ElevatedButton(
-                onPressed: registerBtn,
+                onPressed: () async {
+                  BuildContext scaffoldContext = context;
+                  final data = await registerBtn();
+                  print(data);
+                  if (data != null && scaffoldContext.mounted) {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                          content: Text('Usuário registrado com sucesso!')),
+                    );
+                    Navigator.pop(context);
+                  }
+                },
                 child: const Text("Registrar"),
               ),
             ],
