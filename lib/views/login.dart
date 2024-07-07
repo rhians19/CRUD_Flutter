@@ -1,7 +1,8 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/user_list.dart';
 import 'package:flutter_application_1/views/register.dart';
-import 'package:flutter_application_1/services/autentication_service.dart';
+
 class Login extends StatelessWidget {
   const Login({super.key});
 
@@ -9,13 +10,22 @@ class Login extends StatelessWidget {
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
 
-  final TextEditingController emailController = TextEditingController();
-  final TextEditingController passwordController = TextEditingController();
+    final TextEditingController emailController = TextEditingController();
+    final TextEditingController passwordController = TextEditingController();
 
-    loginBtn() {
+    loginBtn() async {
       if (formKey.currentState!.validate()) {
-        return Navigator.push(
-            context, MaterialPageRoute(builder: (ctx) => const UserList()));
+        try {
+          final credential = await FirebaseAuth.instance
+              .signInWithEmailAndPassword(
+                  email: emailController.text,
+                  password: passwordController.text);
+          return credential;
+        } on FirebaseAuthException catch (e) {
+          if (e.code == "user-not-found") {
+            print("Usuário não encontrado.");
+          }
+        }
       }
     }
 
@@ -81,28 +91,37 @@ class Login extends StatelessWidget {
                                     color: Color.fromARGB(255, 94, 92, 92),
                                     width: 2))),
                       ),
-                      
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           ElevatedButton(
-                              onPressed: () {
-                                loginBtn();
-                                
+                              onPressed: () async {
+                                final UserCredential? credential =
+                                    await loginBtn();
+                                if (credential != null &&
+                                    credential.user != null) {
+                                  if (context.mounted) {
+                                    Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                            builder: (ctx) =>
+                                                const UserList()));
+                                  }
+                                }
                               },
                               child: const Text("Entrar"))
-
                         ],
-                          ),
-              const SizedBox(height: 16),
-              ElevatedButton(
-                onPressed: () {
-                  Navigator.push(
-                    context, MaterialPageRoute(builder: (ctx) => const Register()));
-                },
-                child: const Text("Cadastre-se"),
-                     
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (ctx) => const Register()));
+                        },
+                        child: const Text("Cadastre-se"),
                       ),
                       const Padding(
                         padding: EdgeInsets.all(20),
