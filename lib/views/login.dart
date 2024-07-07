@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_application_1/views/user_list.dart';
-
+import 'package:flutter_application_1/views/register.dart';
+import 'package:flutter_application_1/services/autentication_service.dart';
 class Login extends StatelessWidget {
   const Login({super.key});
 
   @override
   Widget build(BuildContext context) {
     final formKey = GlobalKey<FormState>();
+
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController passwordController = TextEditingController();
 
     loginBtn() {
       if (formKey.currentState!.validate()) {
@@ -24,6 +28,7 @@ class Login extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       TextFormField(
+                        controller: emailController,
                         key: const Key("email"),
                         validator: (String? value) {
                           if (value == null) {
@@ -51,6 +56,7 @@ class Login extends StatelessWidget {
                       ),
                       const SizedBox(height: 16),
                       TextFormField(
+                        controller: passwordController,
                         validator: (String? value) {
                           if (value == null) {
                             return "O campo precisa ser preenchido";
@@ -75,6 +81,7 @@ class Login extends StatelessWidget {
                                     color: Color.fromARGB(255, 94, 92, 92),
                                     width: 2))),
                       ),
+                      
                       const SizedBox(height: 16),
                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -82,9 +89,20 @@ class Login extends StatelessWidget {
                           ElevatedButton(
                               onPressed: () {
                                 loginBtn();
+                                
                               },
                               child: const Text("Entrar"))
+
                         ],
+                          ),
+              const SizedBox(height: 16),
+              ElevatedButton(
+                onPressed: () {
+                  Navigator.push(
+                    context, MaterialPageRoute(builder: (ctx) => const Register()));
+                },
+                child: const Text("Cadastre-se"),
+                     
                       ),
                       const Padding(
                         padding: EdgeInsets.all(20),
